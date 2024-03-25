@@ -13,6 +13,7 @@ const getStudent = async (studentId) => {
     const [rows] = await pool.query("SELECT * FROM student WHERE StudentId = ?", 
         [studentId]
     );
+    
     return rows;
 }
 

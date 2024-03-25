@@ -4,6 +4,9 @@ const textDb = require('../db/text');
 router.get("/", async (req, res) => {
   const studentId = req.query.StudentId;
   try {
+    if (!studentId) {
+      throw {errorCode: 404, message: 'resource_not_found'};
+    }
     const text = await textDb.getAllStudentText(studentId);
     if (text.length < 1) {
       throw {errorCode: 404, message: 'resource_not_found'};
