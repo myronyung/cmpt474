@@ -31,8 +31,9 @@ const addStudent = async (data) => {
 
 const updateStudent = async (studentId, data) => {
     const pool = await getPool();
-    const firstName = data.FirstName;
-    const lastName = data.LastName;
+    const [studentData] = await getStudent(studentId);
+    const firstName = data.FirstName || studentData.FirstName;
+    const lastName = data.LastName || studentData.LastName;
 
     await pool.query(
         "UPDATE student SET FirstName = ?, LastName = ? WHERE StudentID = ?",
