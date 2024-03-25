@@ -6,7 +6,7 @@ const {getText} = require('./text');
 const getComment = async (commentId) => {
     const pool = await getPool();
     const [rows] = await pool.query("SELECT * FROM comments WHERE CommentId = ?", 
-        [textId]
+        [commentId]
     );
     return rows;
 }
@@ -20,14 +20,13 @@ const getAllTextComments = async (textId) => {
     return rows;
 }
 
-const addComment = async (data) => {
-    const text = await getText(data.TextId);
+const addComment = async (textId, data) => {
+    const text = await getText(textId);
     if (text.length < 1) {
         throw {errorCode: 404, message: 'resource_not_found'};
     }
 
     const pool = await getPool();
-    const textId = data.TextId;
     const commentContent = data.CommentContent;
     const commentId = `comment-${nanoId()}`;
 
@@ -46,15 +45,14 @@ const updateComment = async (commentId, data) => {
     
     const pool = await getPool();
     const commentContent = data.CommentContent || commentData.CommentContent;
-    const textId = data.TextId || commentData.TextId;
 
     await pool.query(
-        "UPDATE comments SET StudentId = ?, CommentContent = ? WHERE CommentId = ?",
-        [textId, commentContent, commentId]
+        "UPDATE comments SET CommentContent = ? WHERE CommentId = ?",
+        [commentContent, commentId]
     );
 }
 
-const deleteText = async (commentId) => {
+const deleteComment = async (commentId) => {
     const pool = await getPool();
     await pool.query("DELETE FROM comments WHERE CommentId = ?", 
         [commentId]
@@ -62,9 +60,9 @@ const deleteText = async (commentId) => {
 }
 
 module.exports = {
-  getText,
+  getComment,
   getAllTextComments,
   addComment,
   updateComment,
-  deleteText
+  deleteComment
 };
