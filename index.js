@@ -8,6 +8,7 @@ const textRoute = require("./api/text");
 app.use(express.json());
 app.use('/student', studentRoute);
 app.use('/text', textRoute);
+app.use('/comment', textRoute);
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
