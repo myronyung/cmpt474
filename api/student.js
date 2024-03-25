@@ -15,6 +15,9 @@ router.get("/:studentId", async (req, res) => {
   const { studentId } = req.params;
   try {
     const student = await studentDb.getStudent(studentId);
+    if (student.length < 1) {
+      throw {errorCode: 404, message: 'resource_not_found'};
+    }
     res.json(student);
   } catch (error) {
     console.error(error);

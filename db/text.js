@@ -6,7 +6,7 @@ const {getPool} = require('./pool');
 const getText = async (textId) => {
   const pool = await getPool();
   const [rows] = await pool.query("SELECT * FROM texts WHERE TextId = ?", 
-      [textId]
+    [textId]
   );
   return rows;
 }
@@ -15,7 +15,7 @@ const getText = async (textId) => {
 const getAllStudentText = async (studentId) => {
   const pool = await getPool();
   const [rows] = await pool.query("SELECT * FROM texts WHERE StudentId = ?", 
-      [studentId]
+    [studentId]
   );
   return rows;
 }
@@ -24,7 +24,7 @@ const addText = async (data) => {
   const pool = await getPool();
   const textContent = data.TextContent;
   const studentId = data.StudentID || null;
-  const textId = `text-${hash.update(text).digest('hex')}`;
+  const textId = `text-${hash.update(textContent).digest('hex')}`;
 
   await pool.query(
     "INSERT INTO texts (StudentID, TextId, TextContent) VALUES (?, ?, ?)",
@@ -41,7 +41,7 @@ const updateText = async (textId, data) => {
 
   const pool = await getPool();
   const textContent = data.TextContent || textData.TextContent;
-  const studentId = data.StudentID || textData.StudentID;
+  const studentId = data.StudentId || textData.StudentId;
 
   await pool.query(
     "UPDATE texts SET StudentId = ?, TextContent = ? WHERE TextId = ?",
