@@ -24,7 +24,7 @@ const addText = async (data) => {
   const pool = await getPool();
   const textContent = data.TextContent;
   const studentId = data.StudentID || null;
-  const textId = hash.update(text).digest('hex');
+  const textId = `text-${hash.update(text).digest('hex')}`;
 
   await pool.query(
     "INSERT INTO texts (StudentID, TextId, TextContent) VALUES (?, ?, ?)",
@@ -34,20 +34,24 @@ const addText = async (data) => {
 }
 
 const updateText = async (textId, data) => {
-  const pool = await getPool();
   const [textData] = await getText(textId);
+  if (!textData) {
+    throw {errorCode: 404, message: 'resource_not_found'};
+  }
+
+  const pool = await getPool();
   const textContent = data.TextContent || textData.TextContent;
   const studentId = data.StudentID || textData.StudentID;
 
   await pool.query(
-    "UPDATE texts SET StudentId = ?, textContent = ? WHERE textId = ?",
+    "UPDATE texts SET StudentId = ?, TextContent = ? WHERE TextId = ?",
     [studentId, textContent, textId]
   );
 }
 
 const deleteText = async (textId) => {
   const pool = await getPool();
-  await pool.query("DELETE FROM texts WHERE textId = ?", 
+  await pool.query("DELETE FROM texts WHERE TextId = ?", 
     [textId]
   );
 }
