@@ -1,4 +1,6 @@
-app.post("/texts", async (req, res) => {
+const router = require('express').Router();
+
+router.post("/texts", async (req, res) => {
     try {
       const data = req.body;
       const newTextId = await text.addText(data);
@@ -8,3 +10,5 @@ app.post("/texts", async (req, res) => {
       res.status(500).send("Error adding student");
     }
 });
+
+module.exports = router;
