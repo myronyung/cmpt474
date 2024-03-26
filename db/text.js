@@ -11,6 +11,14 @@ const getText = async (textId) => {
   return rows;
 }
 
+const getAllText = async (textId) => {
+  const pool = await getPool();
+  const [rows] = await pool.query("SELECT * FROM texts", 
+    [textId]
+  );
+  return rows;
+}
+
 //add studentid index in texts table if slow response
 const getAllStudentText = async (studentId) => {
   const pool = await getPool();
@@ -58,6 +66,7 @@ const deleteText = async (textId) => {
 
 module.exports = {
   getText,
+  getAllText,
   getAllStudentText,
   addText,
   updateText,
