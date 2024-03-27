@@ -30,6 +30,14 @@ PUT /comment/{commentId}
 DELETE /comment/{commentId}
 */
 
+
+// Enable CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 app.use(express.json());
 app.use('/student', studentRoute);
 app.use('/text', textRoute);
