@@ -32,7 +32,7 @@ const addText = async (data) => {
   const pool = await getPool();
   const textContent = data.TextContent;
   const studentId = data.StudentID || null;
-  const textId = `text-${hash.update(textContent).digest('hex')}`;
+  const textId = `text-${hash.copy().update(textContent).digest('hex')}`;
 
   await pool.query(
     "INSERT INTO texts (StudentID, TextId, TextContent) VALUES (?, ?, ?)",
