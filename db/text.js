@@ -8,6 +8,10 @@ const getText = async (textId) => {
   const [rows] = await pool.query("SELECT * FROM texts WHERE TextId = ?", 
     [textId]
   );
+
+  if (rows.length < 1) {
+    throw {errorCode: 404, message: 'resource_not_found'};
+  }
   return rows;
 }
 
@@ -16,6 +20,10 @@ const getAllText = async (textId) => {
   const [rows] = await pool.query("SELECT * FROM texts", 
     [textId]
   );
+
+  if (rows.length < 1) {
+    throw {errorCode: 404, message: 'resource_not_found'};
+  }
   return rows;
 }
 
@@ -25,6 +33,10 @@ const getAllStudentText = async (studentId) => {
   const [rows] = await pool.query("SELECT * FROM texts WHERE StudentId = ?", 
     [studentId]
   );
+  
+  if (rows.length < 1) {
+    throw {errorCode: 404, message: 'resource_not_found'};
+  }
   return rows;
 }
 
@@ -43,9 +55,6 @@ const addText = async (data) => {
 
 const updateText = async (textId, data) => {
   const [textData] = await getText(textId);
-  if (!textData) {
-    throw {errorCode: 404, message: 'resource_not_found'};
-  }
 
   const pool = await getPool();
   const textContent = data.TextContent || textData.TextContent;

@@ -8,6 +8,10 @@ const getComment = async (commentId) => {
     const [rows] = await pool.query("SELECT * FROM comments WHERE CommentId = ?", 
         [commentId]
     );
+
+    if (rows.length < 1) {
+        throw {errorCode: 404, message: 'resource_not_found'};
+    }
     return rows;
 }
 
@@ -17,14 +21,15 @@ const getAllTextComments = async (textId) => {
     const [rows] = await pool.query("SELECT * FROM comments WHERE TextId = ?", 
         [textId]
     );
+
+    if (rows.length < 1) {
+        throw {errorCode: 404, message: 'resource_not_found'};
+    }
     return rows;
 }
 
 const addComment = async (textId, data) => {
-    const text = await getText(textId);
-    if (text.length < 1) {
-        throw {errorCode: 404, message: 'resource_not_found'};
-    }
+    await getText(textId);
 
     const pool = await getPool();
     const commentContent = data.CommentContent;
@@ -39,9 +44,6 @@ const addComment = async (textId, data) => {
 
 const updateComment = async (commentId, data) => {
     const [commentData] = await getComment(commentId);
-    if (!commentData) {
-        throw {errorCode: 404, message: 'resource_not_found'};
-    }
     
     const pool = await getPool();
     const commentContent = data.CommentContent || commentData.CommentContent;

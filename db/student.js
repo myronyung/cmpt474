@@ -5,6 +5,10 @@ const {getPool} = require('./pool');
 const getStudents = async () => {
     const pool = await getPool();
     const [rows] = await pool.query("SELECT * FROM student");
+
+    if (rows.length < 1) {
+        throw {errorCode: 404, message: 'resource_not_found'};
+    }
     return rows;
 }
 
@@ -14,6 +18,9 @@ const getStudent = async (studentId) => {
         [studentId]
     );
     
+    if (rows.length < 1) {
+        throw {errorCode: 404, message: 'resource_not_found'};
+    }
     return rows;
 }
 
@@ -32,9 +39,6 @@ const addStudent = async (data) => {
 
 const updateStudent = async (studentId, data) => {
     const [studentData] = await getStudent(studentId);
-    if (!studentData) {
-        throw {errorCode: 404, message: 'resource_not_found'};
-    }
 
     const pool = await getPool();
     const firstName = data.FirstName || studentData.FirstName;
