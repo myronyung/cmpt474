@@ -1,10 +1,10 @@
 const crypto = require('crypto');
 const secret = 'proof-reader';
 const hash = crypto.createHash('sha256', secret);
-const {getPool} = require('./pool');
+const {getPool, getReadPool} = require('./pool');
 
 const getText = async (textId) => {
-  const pool = await getPool();
+  const pool = await getReadPool();
   const [rows] = await pool.query("SELECT * FROM texts WHERE TextId = ?", 
     [textId]
   );
@@ -16,7 +16,7 @@ const getText = async (textId) => {
 }
 
 const getAllText = async (textId) => {
-  const pool = await getPool();
+  const pool = await getReadPool();
   const [rows] = await pool.query("SELECT * FROM texts", 
     [textId]
   );
@@ -29,7 +29,7 @@ const getAllText = async (textId) => {
 
 //add studentid index in texts table if slow response
 const getAllStudentText = async (studentId) => {
-  const pool = await getPool();
+  const pool = await getReadPool();
   const [rows] = await pool.query("SELECT * FROM texts WHERE StudentId = ?", 
     [studentId]
   );

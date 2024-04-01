@@ -1,9 +1,9 @@
 const {customAlphabet} = require('nanoid/non-secure');
 const nanoId = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 12);
-const {getPool} = require('./pool');
+const {getPool, getReadPool} = require('./pool');
 
 const getStudents = async () => {
-    const pool = await getPool();
+    const pool = await getReadPool();
     const [rows] = await pool.query("SELECT * FROM student");
 
     if (rows.length < 1) {
@@ -13,7 +13,7 @@ const getStudents = async () => {
 }
 
 const getStudent = async (studentId) => {
-    const pool = await getPool();
+    const pool = await getReadPool();
     const [rows] = await pool.query("SELECT * FROM student WHERE StudentId = ?", 
         [studentId]
     );

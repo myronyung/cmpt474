@@ -1,10 +1,10 @@
 const {customAlphabet} = require('nanoid/non-secure');
 const nanoId = customAlphabet('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz', 12);
-const {getPool} = require('./pool');
+const {getPool, getReadPool} = require('./pool');
 const {getText} = require('./text');
 
 const getComment = async (commentId) => {
-    const pool = await getPool();
+    const pool = await getReadPool();
     const [rows] = await pool.query("SELECT * FROM comments WHERE CommentId = ?", 
         [commentId]
     );
@@ -17,7 +17,7 @@ const getComment = async (commentId) => {
 
 //add textid index in comments table if slow response
 const getAllTextComments = async (textId) => {
-    const pool = await getPool();
+    const pool = await getReadPool();
     const [rows] = await pool.query("SELECT * FROM comments WHERE TextId = ?", 
         [textId]
     );
